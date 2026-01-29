@@ -1,16 +1,27 @@
+import os
 import streamlit as st
 import pandas as pd
 import pickle
 from tensorflow.keras.models import load_model
 
+# --------------------------------------------------
+# SAFE PATH HANDLING (IMPORTANT)
+# --------------------------------------------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_DIR = os.path.join(BASE_DIR, "saved_models")
+
+# --------------------------------------------------
 # Load saved models
-scaler = pickle.load(open("../saved_models/scaler.pkl", "rb"))
-features = pickle.load(open("../saved_models/features.pkl", "rb"))
-encoder = load_model("../saved_models/encoder.h5")
-model = load_model("../saved_models/churn_model.h5")
+# --------------------------------------------------
+scaler = pickle.load(open(os.path.join(MODEL_DIR, "scaler.pkl"), "rb"))
+features = pickle.load(open(os.path.join(MODEL_DIR, "features.pkl"), "rb"))
+encoder = load_model(os.path.join(MODEL_DIR, "encoder.h5"))
+model = load_model(os.path.join(MODEL_DIR, "churn_model.h5"))
 
-st.title("Health Insurance Customer Churn Prediction")
-
+# --------------------------------------------------
+# UI
+# --------------------------------------------------
+st.title("🏥 Health Insurance Customer Churn Prediction")
 st.write("Enter customer details to predict churn")
 
 # -------- USER INPUT --------
@@ -24,11 +35,11 @@ claim_out = st.selectbox("Claim Request Output", ["Approved", "Rejected"])
 bmi = st.number_input("BMI", min_value=10.0)
 
 # -------- ENCODING --------
-company_map = {"Aetna":0, "MaxLife":1, "StarHealth":2, "ICICI":3, "HDFC":4}
-claim_map = {"Accident":0, "Surgery":1, "Routine":2, "Critical Illness":3}
-conf_map = {"No":0, "Yes":1}
-premium_map = {"Silver":0, "Gold":1, "Platinum":2}
-claim_out_map = {"Rejected":0, "Approved":1}
+company_map = {"Aetna": 0, "MaxLife": 1, "StarHealth": 2, "ICICI": 3, "HDFC": 4}
+claim_map = {"Accident": 0, "Surgery": 1, "Routine": 2, "Critical Illness": 3}
+conf_map = {"No": 0, "Yes": 1}
+premium_map = {"Silver": 0, "Gold": 1, "Platinum": 2}
+claim_out_map = {"Rejected": 0, "Approved": 1}
 
 input_data = {
     "Company Name": company_map[company],
