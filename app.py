@@ -63,7 +63,7 @@ if st.button("Predict Churn"):
     encoded = encoder.predict(scaled)
     pred = model.predict(encoded)[0][0]
 
-    if pred > 0.25:
+    if pred > 0.01:
         st.error(f"❌ Customer WILL CHURN (Probability: {pred:.2f})")
     else:
         st.success(f"✅ Customer will NOT churn (Probability: {pred:.2f})")
